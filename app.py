@@ -25,17 +25,16 @@ vectorizer = None
 
 if model_path.is_file() and vectorizer_path.is_file():
 try:
-model, vectorizer = load_model_files(
-str(model_path),
-str(vectorizer_path)
-)
+        model, vectorizer = load_model_files(
+        str(model_path),
+        str(vectorizer_path)
+        )
 except Exception as error:
 st.error(f"Could not load model files: {error}")
 else:
-st.warning(
-"The model files are missing. Check that emotion_model.pkl "
-"and emotion_vectorizer.pkl are uploaded to GitHub."
-)
+        st.warning(
+        "The model files are missing. Check that emotion_model.pkl "
+            "and emotion_vectorizer.pkl are uploaded to GitHub.")
 
 if clicked:
 if not text.strip():
