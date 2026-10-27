@@ -8,11 +8,11 @@ st.title("💗 Emotion Detection App")
 st.write("Enter a sentence to predict its emotion.")
 
 folder = Path(file).resolve().parent
-model_path = folder / “emotion_model.pkl”
-vectorizer_path = folder / “emotion_vectorizer.pkl”
+model_path = folder / "emotion_model.pkl"
+vectorizer_path = folder / "emotion_vectorizer.pkl"
 
-text = st.text_area(“Enter your sentence:”, placeholder=“I am so happy today!”)
-clicked = st.button(“Detect Emotion”, type=“primary”)
+text = st.text_area("Enter your sentence:", placeholder=“I am so happy today!”)
+clicked = st.button("Detect Emotion", type="primary")
 
 @st.cache_resource
 def load_model_files(model_file, vectorizer_file):
@@ -33,13 +33,13 @@ except Exception as error:
 st.error(f”Could not load model files: {error}”)
 else:
 st.warning(
-“The model files are missing. Check that emotion_model.pkl “
-“and emotion_vectorizer.pkl are uploaded to GitHub.”
+"The model files are missing. Check that emotion_model.pkl "
+"and emotion_vectorizer.pkl are uploaded to GitHub."
 )
 
 if clicked:
 if not text.strip():
-st.warning(“Please enter a sentence.”)
+st.warning("Please enter a sentence.")
 
 elif model is None or vectorizer is None:
     st.error("Prediction is unavailable until both model files are uploaded.")
