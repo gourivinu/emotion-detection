@@ -2,7 +2,7 @@ from pathlib import Path
 import streamlit as st
 import joblib
 
-st.set_page_config(page_title=“Emotion Detection”, page_icon=“💗”)
+st.set_page_config(page_title="Emotion Detection", page_icon=“💗”)
 
 st.title(“💗 Emotion Detection App”)
 st.write(“Enter a sentence to predict its emotion.”)
