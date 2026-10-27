@@ -49,10 +49,9 @@ if clicked:
         2: "Love",
         3: "Anger",
         4: "Fear",
-        5: "Surprise"
-    }
-    text_vector = vectorizer.transform([text])
-    prediction = int(model.predict(text_vector)[0])
-    st.success(
+        5: "Surprise"}
+text_vector = vectorizer.transform([text])
+prediction = int(model.predict(text_vector)[0])
+st.success(
         f"Predicted Emotion: {emotions.get(prediction, str(prediction))}"
     )
