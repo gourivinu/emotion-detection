@@ -30,7 +30,7 @@ str(model_path),
 str(vectorizer_path)
 )
 except Exception as error:
-st.error(f”Could not load model files: {error}”)
+st.error(f"Could not load model files: {error}")
 else:
 st.warning(
 "The model files are missing. Check that emotion_model.pkl "
