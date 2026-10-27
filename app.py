@@ -16,9 +16,9 @@ clicked = st.button("Detect Emotion", type="primary")
 
 @st.cache_resource
 def load_model_files(model_file, vectorizer_file):
-model = joblib.load(model_file)
-vectorizer = joblib.load(vectorizer_file)
-return model, vectorizer
+    model = joblib.load(model_file)
+    vectorizer = joblib.load(vectorizer_file)
+    return model, vectorizer
 
 model = None
 vectorizer = None
