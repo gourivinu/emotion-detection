@@ -11,7 +11,7 @@ folder = Path(file).resolve().parent
 model_path = folder / "emotion_model.pkl"
 vectorizer_path = folder / "emotion_vectorizer.pkl"
 
-text = st.text_area("Enter your sentence:", placeholder=“I am so happy today!”)
+text = st.text_area("Enter your sentence:", placeholder="I am so happy today!")
 clicked = st.button("Detect Emotion", type="primary")
 
 @st.cache_resource
