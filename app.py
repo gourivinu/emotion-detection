@@ -24,26 +24,26 @@ model = None
 vectorizer = None
 
 if model_path.is_file() and vectorizer_path.is_file():
-try:
+    try:
         model, vectorizer = load_model_files(
         str(model_path),
         str(vectorizer_path)
         )
-except Exception as error:
-st.error(f"Could not load model files: {error}")
+    except Exception as error:
+        st.error(f"Could not load model files: {error}")
 else:
         st.warning(
         "The model files are missing. Check that emotion_model.pkl "
             "and emotion_vectorizer.pkl are uploaded to GitHub.")
 
 if clicked:
-if not text.strip():
-st.warning("Please enter a sentence.")
+        if not text.strip():
+                st.warning("Please enter a sentence.")
 
-elif model is None or vectorizer is None:
-    st.error("Prediction is unavailable until both model files are uploaded.")
-else:
-    emotions = {
+        elif model is None or vectorizer is None:
+                st.error("Prediction is unavailable until both model files are uploaded.")
+        else:
+            emotions = {
         0: "Sadness",
         1: "Joy",
         2: "Love",
