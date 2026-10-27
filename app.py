@@ -44,14 +44,13 @@ if clicked:
                 st.error("Prediction is unavailable until both model files are uploaded.")
         else:
             emotions = {
-        0: "Sadness",
-        1: "Joy",
-        2: "Love",
-        3: "Anger",
-        4: "Fear",
-        5: "Surprise"}
-text_vector = vectorizer.transform([text])
-prediction = int(model.predict(text_vector)[0])
-st.success(
-        f"Predicted Emotion: {emotions.get(prediction, str(prediction))}"
-    )
+                0: "Sadness",
+                1: "Joy",
+                2: "Love",
+                3: "Anger",
+                4: "Fear",
+                5: "Surprise"}
+                text_vector = vectorizer.transform([text])
+                prediction = int(model.predict(text_vector)[0])
+                st.success(
+                    f"Predicted Emotion: {emotions.get(prediction, str(prediction))}")
