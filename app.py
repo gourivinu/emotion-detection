@@ -1,57 +1,63 @@
-from pathlib import Path
 import streamlit as st
-import joblib
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-st.set_page_config(page_title="Emotion Detection", page_icon="💗")
+st.set_page_config(
+    page_title="Emotion Detection",
+    page_icon="💗"
+)
 
-st.title("💗 Emotion Detection App")
-st.write("Enter a sentence to predict its emotion.")
+MODEL_PATH = "fine_tuned_emotion_model"
 
-folder = Path(__file__).resolve().parent
-model_path = folder / "emotion_model.pkl"
-vectorizer_path = folder / "emotion_vectorizer.pkl"
+EMOTION_LABELS = {
+    0: "SAD 😢",
+    1: "HAPPY 😊",
+    2: "LOVE 💗",
+    3: "ANGRY 😡",
+    4: "FEAR 😨",
+    5: "SURPRISE 😲",
+}
 
-text = st.text_area("Enter your sentence:", placeholder="I am so happy today!")
-clicked = st.button("Detect Emotion", type="primary")
 
 @st.cache_resource
-def load_model_files(model_file, vectorizer_file):
-    model = joblib.load(model_file)
-    vectorizer = joblib.load(vectorizer_file)
-    return model, vectorizer
+def load_model():
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH)
+    model.eval()
+    return tokenizer, model
 
-model = None
-vectorizer = None
 
-if model_path.is_file() and vectorizer_path.is_file():
-    try:
-        model, vectorizer = load_model_files(
-        str(model_path),
-        str(vectorizer_path)
+st.title("💗 Emotion Detection")
+st.write("Enter a sentence to predict its emotion.")
+
+try:
+    tokenizer, model = load_model()
+except Exception as error:
+    st.error(f"Could not load the model: {error}")
+    st.stop()
+
+text = st.text_area("Enter your sentence:")
+
+if st.button("Detect Emotion"):
+    if text.strip():
+        inputs = tokenizer(
+            text,
+            return_tensors="pt",
+            truncation=True,
+            padding=True,
+            max_length=128,
         )
-    except Exception as error:
-        st.error(f"Could not load model files: {error}")
-else:
-        st.warning(
-        "The model files are missing. Check that emotion_model.pkl "
-            "and emotion_vectorizer.pkl are uploaded to GitHub.")
 
-if clicked:
-        if not text.strip():
-                st.warning("Please enter a sentence.")
+        with torch.no_grad():
+            outputs = model(**inputs)
 
-        elif model is None or vectorizer is None:
-                st.error("Prediction is unavailable until both model files are uploaded.")
-        else:
-            emotions = {
-                0: "Sadness",
-                1: "Joy",
-                2: "Love",
-                3: "Anger",
-                4: "Fear",
-                5: "Surprise"
-            }
-            text_vector = vectorizer.transform([text])
-            prediction = int(model.predict(text_vector)[0])
-            st.success(
-                    f"Predicted Emotion: {emotions.get(prediction, str(prediction))}")
+        probabilities = torch.softmax(outputs.logits, dim=1)
+        prediction = torch.argmax(probabilities, dim=1).item()
+        confidence = probabilities[0][prediction].item()
+
+        emotion = EMOTION_LABELS.get(prediction, "UNKNOWN")
+
+        st.success(f"Predicted Emotion: {emotion}")
+        st.write(f"Confidence: {confidence:.2%}")
+    else:
+        st.warning("Please enter a sentence.")
